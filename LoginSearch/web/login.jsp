@@ -6,13 +6,16 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="LoginCSS.css"/>
         <title>Login Page</title>
     </head>
     <body>
-        <h1>Login Page</h1>
+        <div class="login">
+             <h1>Login Page</h1>
         <form action="MainController" method="POST">
             User ID <input type="text" name="txtUserID" /><br/>
             Password <input type="password" name="txtPassword" /><br/>
@@ -27,6 +30,8 @@
         %>
         <font color="red">
         <%= error %>
+        <a href="createUser.jsp">Create New Account</a> 
         </font>
+        </div>
     </body>
 </html>

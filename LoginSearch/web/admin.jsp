@@ -8,6 +8,7 @@
 <%@page import="tuongtlc.user.UserDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -60,16 +61,16 @@
                         <tr>
                             <td><%= ++count%></td>
                             <td>
-                                <%= user.getUserID()%>
-                                <input type="text" name="UserID" value="<%= user.getUserID()%>" readonly=""/>
+                                
+                                <input type="text" name="userID" value="<%= user.getUserID()%>" readonly=""/>
                             </td>
                                 
                             <td>
-                                <%= user.getFullName()%>
+                                
                                 <input type="text" name="fullName" value="<%= user.getFullName()%>" required=""/>
                             </td>
                             <td>
-                                <%= user.getRoleID()%>
+                                
                                 <input type="text" name="roleID" value="<%= user.getRoleID()%>" required=""/>
                             </td>
                             <td><%= user.getPassword()%></td>

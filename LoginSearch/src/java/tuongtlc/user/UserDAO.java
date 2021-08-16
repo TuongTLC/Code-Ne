@@ -116,4 +116,125 @@ public class UserDAO {
         }
         return check;
     }
+    public boolean update(UserDTO user) throws SQLException{
+        boolean check = false;
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBUtils.getConnection();
+            if (con!=null) {
+                String sql="UPDATE tblUsers "
+                        + " SET fullName=?, roleID=? "
+                        + " WHERE userID=? ";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, user.getFullName());
+                ps.setString(2, user.getRoleID());
+                ps.setString(3, user.getUserID());
+                check = ps.executeUpdate()>0?true:false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            if (ps!=null) {
+                ps.close();
+            }
+            if (con!=null) {
+                con.close();
+            }
+        }
+        return check;
+    }
+    public boolean checkDuplicate(String userID) throws SQLException{
+        boolean check = false;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            con = DBUtils.getConnection();
+            if (con!=null) {
+                String sql="SELECT userID FROM tblUsers "
+                        + " WHERE userID=? ";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, userID);
+                rs=ps.executeQuery();
+                if (rs.next()) {
+                    check = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            if (rs!=null) {
+                rs.close();
+            }
+            if (ps!=null) {
+                ps.close();
+            }
+            if (con!=null) {
+                con.close();
+            }
+        }
+        return check;
+    }
+    public boolean insert(UserDTO user) throws SQLException{
+        boolean check = false;
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBUtils.getConnection();
+            if (con!=null) {
+                String sql="INSERT INTO tblUsers(userID, fullName, roleID, password)  "
+                        + " VALUES(?,?,?,?) ";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, user.getUserID());
+                ps.setString(2, user.getFullName());
+                ps.setString(3, user.getRoleID());
+                ps.setString(4, user.getPassword());
+                
+                check = ps.executeUpdate()>0?true:false;
+                
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            if (ps!=null) {
+                ps.close();
+            }
+            if (con!=null) {
+                con.close();
+            }
+        }
+        return check;
+    }
+    public boolean insert2(UserDTO user) throws SQLException, ClassNotFoundException{
+        boolean check = false;
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBUtils.getConnection();
+            if (con!=null) {
+                String sql="INSERT INTO tblUsers(userID, fullName, roleID, password) "
+                        + " VALUES(?,?,?,?) ";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, user.getUserID());
+                ps.setString(2, user.getFullName());
+                ps.setString(3, user.getRoleID());
+                ps.setString(4, user.getPassword());
+                
+                check = ps.executeUpdate()>0?true:false;
+                
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        finally{
+            if (ps!=null) {
+                ps.close();
+            }
+            if (con!=null) {
+                con.close();
+            }
+        }
+        return check;
+    }
 }
