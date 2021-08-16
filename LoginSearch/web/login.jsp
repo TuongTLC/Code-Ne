@@ -10,11 +10,12 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="LoginCSS.css"/>
+        <link rel="stylesheet" href="ProjCSS.css"/>
         <title>Login Page</title>
     </head>
     <body>
-        <div class="login">
+        <div class="background">
+        <div class="innerDiv">
              <h1>Login Page</h1>
         <form action="MainController" method="POST">
             User ID <input type="text" name="txtUserID" /><br/>
@@ -29,9 +30,10 @@
                 }
         %>
         <font color="red">
-        <%= error %>
+        <%= error %><br/>
         <a href="createUser.jsp">Create New Account</a> 
         </font>
+        </div>
         </div>
     </body>
 </html>

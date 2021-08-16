@@ -44,9 +44,13 @@ public class CreateController extends HttpServlet {
                 check = false;
                 userErr.setFullNameError("Full Name must >=3 and <=10");
             }
-            if (password.equals(confirm)) {
+            if (password.length()<=6 || password.length()>20) {
                 check = false;
-                userErr.setConfirmError("Confirm error!!!");
+                userErr.setPasswordError("Password must >=6 and <=20");
+            }
+            if (!password.equals(confirm)) {
+                check = false;
+                userErr.setConfirmError("Confirm not match !!!");
             }
             if ( check) {
                UserDAO dao = new UserDAO();
@@ -76,12 +80,12 @@ public class CreateController extends HttpServlet {
             }
             
         } catch (Exception e) {
-            if (e.toString().contains("duplicate")) {
-                userErr.setUserIDError("Duplicated!!!");
-                request.setAttribute("ERROR_USER", userErr);
-            }
+//            if (e.toString().contains("duplicate")) {
+//                userErr.setUserIDError("Duplicated!!!");
+//                request.setAttribute("ERROR_USER", userErr);
+//            }
             e.printStackTrace();
-            //log("ERROR at CreateCOntroller"+ e.toString());
+            log("ERROR at CreateCOntroller"+ e.toString());
         }finally{
             request.getRequestDispatcher(url).forward(request, response);
         }
