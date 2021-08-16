@@ -11,38 +11,43 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import tuongtlc.user.UserDAO;
+import tuongtlc.user.UserDTO;
 
 /**
  *
  * @author trinh
  */
-public class MainController extends HttpServlet {
-    private static final String ERROR="error.jsp";
-    private static final String LOGIN="LoginController";
-     private static final String SEARCH="SearchController";
-     private static final String LOGOUT="LogoutController";
-    private static final String DELETE="DeleteController"; 
+public class DeleteController extends HttpServlet {
+
+    private static final String SUCCESS="SearchController";
+    private static final String ERROR="SearchController";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         String url = ERROR;
         try {
-            String action = request.getParameter("action");
-            if ("Login".equals(action)) {
-                url=LOGIN;
-            }else if ("Search".equals(action)) {
-                url = SEARCH;
-            }else if ("Logout".equals(action)) {
-                url = LOGOUT;
-            }else if ("Delete".equals(action)) {
-                url = DELETE;
+            String userID= request.getParameter("userID");
+            UserDAO dao = new UserDAO();
+            HttpSession session = request.getSession();
+            UserDTO loginUser = (UserDTO)session.getAttribute("LOGIN_USER");
+            if (userID.endsWith(loginUser.getUserID())) {
+                request.setAttribute("ERROR", "This user is logging in, Can not delete");
+            }else{
+            boolean check = dao.delete(userID);
+            if (check) {
+                url = SUCCESS;
+            }else{
+                request.setAttribute("ERROR", "Can not delete!");
             }
-        } catch (Exception e) {
-            log("ERROR at MainController" + e.toString());
-        }finally{
-            request.getRequestDispatcher(url).forward(request, response);
+            }
             
+        } catch (Exception e) {
+            log("ERROR at DeletecController"+e.toString());
+        }finally
+        {
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

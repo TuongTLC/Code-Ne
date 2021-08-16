@@ -91,4 +91,29 @@ public class UserDAO {
         }
         return list;
     }
+    public boolean delete(String userID) throws SQLException{
+        boolean check = false;
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBUtils.getConnection();
+            if (con!=null) {
+                String sql="DELETE FROM tblUsers "
+                        + " WHERE userID=?";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, userID);
+                check = ps.executeUpdate()>0?true:false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            if (ps!=null) {
+                ps.close();
+            }
+            if (con!=null) {
+                con.close();
+            }
+        }
+        return check;
+    }
 }

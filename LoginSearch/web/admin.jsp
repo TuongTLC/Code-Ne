@@ -47,6 +47,8 @@
                             <th>Full Name</th>
                             <th>Role ID</th>
                             <th>Password</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -54,18 +56,47 @@
                             int count=0;
                             for(UserDTO user:list){
                             %>
+                    <form action="MainController" method="POST">
                         <tr>
                             <td><%= ++count%></td>
-                            <td><%= user.getUserID()%></td>
-                            <td><%= user.getFullName()%></td>
-                            <td><%= user.getRoleID()%></td>
+                            <td>
+                                <%= user.getUserID()%>
+                                <input type="text" name="UserID" value="<%= user.getUserID()%>" readonly=""/>
+                            </td>
+                                
+                            <td>
+                                <%= user.getFullName()%>
+                                <input type="text" name="fullName" value="<%= user.getFullName()%>" required=""/>
+                            </td>
+                            <td>
+                                <%= user.getRoleID()%>
+                                <input type="text" name="roleID" value="<%= user.getRoleID()%>" required=""/>
+                            </td>
                             <td><%= user.getPassword()%></td>
+                            
+                            <td>
+                                <a href="MainController?userID=<%= user.getUserID()%>&action=Delete&search=<%=search%>">Delete</a>
+                            </td>
+                            <td>
+                                <input type="submit" value="Update" name="action"/>
+                                <input type="hidden" name="search" value="<%= search %>"/>
+                            </td>
                         </tr>
+                    </form>
                         <%                         
                             }
                         %>
                     </tbody>
                 </table>
+                    <%
+                    String errorMsg = (String)request.getAttribute("ERROR");
+                    if (errorMsg==null) {
+                            errorMsg="";
+                        }
+                    %>
+                    <font color="red">
+                    <%= errorMsg %>
+                    </font>
         <%
                 }
         %>
