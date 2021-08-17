@@ -41,7 +41,6 @@ public class EditFromCartController extends HttpServlet {
 //                        break;
 //                    }
 //                }
-                //////
                  tea = cart.getCart().get(id);
                  tea.setQuantity(quantity);
                 //////
