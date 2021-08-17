@@ -28,6 +28,18 @@
         <servlet-name>CreateController</servlet-name>
         <servlet-class>tuongtlc.controllers.CreateController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddToCartController</servlet-name>
+        <servlet-class>tuongtlc.controllers.AddToCartController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RemoveFromCartController</servlet-name>
+        <servlet-class>tuongtlc.controllers.RemoveFromCartController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditFromCartController</servlet-name>
+        <servlet-class>tuongtlc.controllers.EditFromCartController</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>MainController</servlet-name>
         <url-pattern>/MainController</url-pattern>
@@ -55,6 +67,18 @@
     <servlet-mapping>
         <servlet-name>CreateController</servlet-name>
         <url-pattern>/CreateController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddToCartController</servlet-name>
+        <url-pattern>/AddToCartController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RemoveFromCartController</servlet-name>
+        <url-pattern>/RemoveFromCartController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditFromCartController</servlet-name>
+        <url-pattern>/EditFromCartController</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

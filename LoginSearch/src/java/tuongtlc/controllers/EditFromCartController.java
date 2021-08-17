@@ -11,56 +11,50 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import tuongtlc.tea.CartDTO;
+import tuongtlc.tea.TeaDTO;
 
 /**
  *
  * @author trinh
  */
-public class MainController extends HttpServlet {
+public class EditFromCartController extends HttpServlet {
     private static final String ERROR="error.jsp";
-    private static final String LOGIN="LoginController";
-     private static final String SEARCH="SearchController";
-     private static final String LOGOUT="LogoutController";
-    private static final String DELETE="DeleteController"; 
-    private static final String UPDATE="UpdateController";
-    private static final String CREATE="CreateController";
-    private static final String ADD_TO_CART="AddToCartController";
-    private static final String VIEW_CART="viewCart.jsp";
-     private static final String REMOVE_FROM_CART="RemoveFromCartController";
-     private static final String EDIT_FROM_CART="EditFromCartController";
+    private static final String SUCCESS="viewCart.jsp";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
         String url = ERROR;
         try {
-            String action = request.getParameter("action");
-            if ("Login".equals(action)) {
-                url=LOGIN;
-            }else if ("Search".equals(action)) {
-                url = SEARCH;
-            }else if ("Logout".equals(action)) {
-                url = LOGOUT;
-            }else if ("Delete".equals(action)) {
-                url = DELETE;
-            }else if ("Update".equals(action)) {
-                url = UPDATE;
-            }else if ("Create".equals(action)) {
-                url = CREATE;
-            }else if ("Add".equals(action)) {
-                url = ADD_TO_CART;
-            }else if ("View".equals(action)) {
-                url = VIEW_CART;
-            }else if ("Remove".equals(action)) {
-                url = REMOVE_FROM_CART;
-            }else if ("Edit".equals(action)) {
-                url = EDIT_FROM_CART;
+            String id = request.getParameter("id");
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            HttpSession session = request.getSession();
+            CartDTO cart = (CartDTO) session.getAttribute("CART");
+            if (cart != null) {
+                TeaDTO tea = null;
+//                for(TeaDTO dto : cart.getCart().values()){
+//                    if (dto.getId().equals(id)) {
+//                        String name = dto.getName();
+//                        float price = dto.getPrice();
+//                        tea = new TeaDTO(id, name, quantity, price);
+//                        break;
+//                    }
+//                }
+                //////
+                 tea = cart.getCart().get(id);
+                 tea.setQuantity(quantity);
+                //////
+                boolean check = cart.update(id, tea);
+                if (check) {
+                    session.setAttribute("CART", cart);
+                    url = SUCCESS;
+                }
             }
         } catch (Exception e) {
-            log("ERROR at MainController" + e.toString());
+            log("ERROR at EditFromCartController"+ e.toString());
         }finally{
             request.getRequestDispatcher(url).forward(request, response);
-            
         }
     }
 
