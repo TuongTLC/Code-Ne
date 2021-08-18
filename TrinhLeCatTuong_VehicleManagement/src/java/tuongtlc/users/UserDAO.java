@@ -24,16 +24,17 @@ public class UserDAO {
         try {
             con = DBUtils.getConnection();
             if (con != null) {
-                String sql = "SELECT  userFullName, roleID "
+                String sql = "SELECT  userName, userFullName, roleID "
                         + " FROM tblUsers "
                         + " WHERE userName=" +"'"+ userName +"'"+ ""
                         + " AND password=" +"'"+ password+"'";
                 ps = con.prepareStatement(sql);
                 rs = ps.executeQuery();
                 if (rs.next()) {
+                    String loginUserName = rs.getString("userName");
                     String fullName = rs.getString("userFullName");
                     int roleID = Integer.parseInt(rs.getString("roleID"));
-                    user = new UserDTO( "", fullName, "", roleID);
+                    user = new UserDTO( loginUserName, fullName, "", roleID);
                 }
             }
         } catch (Exception e) {

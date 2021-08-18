@@ -4,6 +4,8 @@
     Author     : trinh
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@page import="java.math.BigDecimal"%>
 <%@page import="tuongtlc.products.CartProductDTO"%>
 <%@page import="tuongtlc.products.CartDTO"%>
@@ -36,22 +38,25 @@
                 <%
                     int count = 1;
                     float total = 0;
-                    for (CartProductDTO tea : cart.getCart().values()) {
-                        total+= tea.getPrice() * tea.getQuantity();
+                    List<CartProductDTO> order = new ArrayList<>();
+                    for (CartProductDTO pro : cart.getCart().values()) {
+                        order.add(pro);
+                        total+= pro.getPrice() * pro.getQuantity();
                 %>
                 <form action="MainController" method="POST">
                 <tr>
                     <td><%= count++ %></td>
-
-                    <td><%= tea.getName() %></td>
                     <td>
-                        <input type="number" name="quantity" value="<%= tea.getQuantity()%>" required="" min="1" max="99"/>
+                        <%= pro.getName() %>
                     </td>
-                    <td><%= tea.getPrice() %> $</td>
-                    <td><%= tea.getPrice() * tea.getQuantity() %>$</td>
+                    <td>
+                        <input type="number" name="quantity" value="<%= pro.getQuantity()%>" required="" min="1" max="99"/>
+                    </td>
+                    <td><%= pro.getPrice() %> $</td>
+                    <td><%= pro.getPrice() * pro.getQuantity() %>$</td>
                     <td>
                         <input type="submit" name="action" value="Remove"/>
-                        <input type="hidden" name="id" value="<%= tea.getName() %>" />
+                        <input type="hidden" name="id" value="<%= pro.getName() %>" />
                     </td>
                     <td>
                         <input type="submit" value="Edit" name="action" />
@@ -68,6 +73,15 @@
                     String search = request.getParameter("search");
                 %>
             <a href="shoping.jsp">Add more items</a>
+            
+            
+            <form action="MainController" method="POST">
+                <%
+                session.setAttribute("orderList", order);
+            %>
+                <input type="submit" value="Check out"  name="action"/>
+            </form>
+            
         <%
             }
         %>

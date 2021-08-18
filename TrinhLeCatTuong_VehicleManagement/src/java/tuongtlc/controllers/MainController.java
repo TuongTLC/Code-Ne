@@ -31,6 +31,10 @@ public class MainController extends HttpServlet {
     private static final String ADD_TO_CART = "AddToCartController";
     private static final String REMOVE_FROM_CART = "RemoveFromCartController";
     private static final String EDIT_CART = "EditCartController";
+    private static final String CHECK_OUT = "CheckOutController";
+    private static final String VIEW_ORDER = "ViewOrderController";
+    private static final String SEARCH_ORDER = "SearchOrderController";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -59,6 +63,12 @@ public class MainController extends HttpServlet {
                 url = REMOVE_FROM_CART;
             }else if ("Edit".equals(action)) {
                 url = EDIT_CART;
+            }else if ("Check out".trim().equals(action)) {
+                url = CHECK_OUT;
+            }else if ("ViewOrder".trim().equals(action)) {
+                url = VIEW_ORDER;
+            }else if ("Search Order".trim().equals(action)) {
+                url = SEARCH_ORDER;
             }
             
             

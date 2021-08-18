@@ -40,6 +40,7 @@
             <input type="submit" value="Search" name="action"/>
             <input type="submit" value="Show All" name="action"/><br/>
             <a href="viewCart.jsp">View Cart</a>
+            <a href="viewOrder.jsp">View Order</a>
         </form>
         <%
             List<ProductDTO> list = (List<ProductDTO>) request.getAttribute("LIST_PRODUCT");
