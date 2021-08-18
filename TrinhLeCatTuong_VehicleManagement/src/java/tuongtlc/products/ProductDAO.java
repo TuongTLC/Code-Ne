@@ -152,4 +152,36 @@ public class ProductDAO {
         }
         return check;
     }
+    public boolean insert(ProductDTO product) throws SQLException{
+        boolean check = false;
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = DBUtils.getConnection();
+            if (con!=null) {
+                String sql="INSERT INTO tblProducts( productName, productPrice,"
+                        + " description, brandID, quantity, sold) "
+                        + " VALUES(?,?,?,?,?,?)";
+                ps = con.prepareStatement(sql);
+                ps.setString(1, product.getProductName());
+                ps.setString(2, String.valueOf(product.getProductPrice()));
+                ps.setString(3, product.getDescription());
+                ps.setString(4, String.valueOf(product.getBrandID()));
+                ps.setString(5, String.valueOf(product.getQuantity()));
+                ps.setString(6, String.valueOf(product.getSold()));
+                
+                check = ps.executeUpdate()>0?true:false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally{
+            if (ps!=null) {
+                ps.close();
+            }
+            if (con!=null) {
+                con.close();
+            }
+        }
+        return check;
+    }
 }

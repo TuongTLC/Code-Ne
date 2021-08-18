@@ -34,6 +34,7 @@
             <input type="submit" value="Search" name="action"/>
             <input type="submit" value="Show All" name="action"/>
         </form>
+            <a href="createProduct.jsp" >Create New Product</a>
         <%
             List<ProductDTO> list = (List<ProductDTO>) request.getAttribute("LIST_PRODUCT");
             if (list != null && !list.isEmpty()) {
@@ -62,7 +63,9 @@
                             <input type="hidden" name="productID" value="<%= product.getProductID()%>"/>
                         </td>
                         <td>
-                            <input type="text" name="productName" value="<%= product.getProductName()%>" required=""/>
+<!--                            <input type="text" name="productName" value="" required=""/>-->
+                                <%= product.getProductName()%>
+                            
                         </td>
                         <td>
                             <input type="text" name="productPrice" value="<%= product.getProductPrice()%>" required=""/>$
@@ -74,7 +77,8 @@
                                 for (BrandDTO brand : brandList) {
                                     if (brand.getBrandID() == product.getBrandID()) {
                             %>
-                            <input type="text" name="brandID" value="<%= brand.getBrandName()%>" />
+<!--                            <input type="text" name="brandID" value="" />-->
+                                <%= brand.getBrandName()%>
                             <%
 
                                     }

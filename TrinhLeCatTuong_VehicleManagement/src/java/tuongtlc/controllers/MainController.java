@@ -27,6 +27,7 @@ public class MainController extends HttpServlet {
     private static final String SEARCH_ALL_PRODUCT = "SearchProductController?search=";
     private static final String DELETE_PRODUCT = "DeleteProductController";
     private static final String UPDATE_PRODUCT = "UpdateProductController";
+    private static final String CREATE_PRODUCT = "CreateProductController";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -47,7 +48,10 @@ public class MainController extends HttpServlet {
                 url = DELETE_PRODUCT;
             }else if ("Update".equals(action)) {
                 url = UPDATE_PRODUCT;
+            }else if ("Create Product".equals(action)) {
+                url = CREATE_PRODUCT;
             }
+            
         } catch (Exception e) {
             log("ERROR at MainController " + e.toString());
         }finally{
