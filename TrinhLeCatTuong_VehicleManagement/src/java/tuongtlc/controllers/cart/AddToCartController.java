@@ -3,64 +3,79 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tuongtlc.controllers.product;
+package tuongtlc.controllers.cart;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import tuongtlc.products.BrandDTO;
+import javax.servlet.http.HttpSession;
+import tuongtlc.products.CartDTO;
+import tuongtlc.products.CartProductDTO;
 import tuongtlc.products.ProductDAO;
 import tuongtlc.products.ProductDTO;
+import tuongtlc.users.UserDTO;
 
 /**
  *
  * @author tuongtlc
  */
-@WebServlet(name = "UpdateProductController", urlPatterns = {"/UpdateProductController"})
-public class UpdateProductController extends HttpServlet {
-    private static final String ERROR="admin.jsp";
+@WebServlet(name = "AddToCartController", urlPatterns = {"/AddToCartController"})
+public class AddToCartController extends HttpServlet {
+    private static final String ERROR="error.jsp";
+    private static final String LOGIN="login.jsp";
     private static final String SUCCESS="SearchProductController";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            int productID = Integer.parseInt(request.getParameter("productID"));
-            String productName = request.getParameter("productName");
-            float price = Float.parseFloat(request.getParameter("productPrice"));
             
-            int brandID = 0;
-            String brandName= request.getParameter("brandID");
+            HttpSession session = request.getSession();
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            
+            int proID = Integer.parseInt(request.getParameter("productID"));
             ProductDAO dao = new ProductDAO();
-            List<BrandDTO> brandList = dao.getListBrand();
-            for (BrandDTO brand : brandList) {
-                if (brand.getBrandName().equalsIgnoreCase(brandName)) {
-                    brandID = brand.getBrandID();
+            List<ProductDTO> pro = dao.getListProduct("");
+            ProductDTO dto = null;
+            for (ProductDTO p : pro) {
+                if (proID == p.getProductID()) {
+                    dto = p;
+                }
+            }
+            String name ="";
+            name = dto.getProductName();
+            float price = 0;
+            price = dto.getProductPrice();
+            int quantity = 1;
+            CartDTO cart = (CartDTO) session.getAttribute("CART");
+            if (cart == null) {
+                cart = new CartDTO();
+            }
+            CartProductDTO tea = new CartProductDTO( name.trim(), quantity, price);
+            boolean check = cart.add(tea);
+            if (check) {
+                if (loginUser == null) {
+                    url = LOGIN;
+                    request.setAttribute("ERROR", " Please login to buy!");
+                }else{
+                    session.setAttribute("CART", cart);
+                request.setAttribute("message", name +  " add to cart successfull!");
+                url= SUCCESS;
                 }
             }
             
-            String description = request.getParameter("productDescription");
-            int  quantity = Integer.parseInt(request.getParameter("productQuantity"));
-            int sold = Integer.parseInt(request.getParameter("productSold"));
-            
-            ProductDTO dto = new ProductDTO(productID, productName, price, description, brandID, quantity, sold);
-            boolean check = dao.update(dto);
-            if (check) {
-                url = SUCCESS; 
-            }else{
-                request.setAttribute("ERROR", "Can not update!");
-            }
-            
         } catch (Exception e) {
-            log("ERROR at UpdateController"+e.toString());
+            log("Error at AddToCartController "+ e.toString());
             e.printStackTrace();
         }finally{
             request.getRequestDispatcher(url).forward(request, response);
         }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

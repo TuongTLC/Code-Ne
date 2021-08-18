@@ -63,8 +63,8 @@
                             <input type="hidden" name="productID" value="<%= product.getProductID()%>"/>
                         </td>
                         <td>
-<!--                            <input type="text" name="productName" value="" required=""/>-->
                                 <%= product.getProductName()%>
+                                <input type="hidden" name="productName" value="<%= product.getProductName()%>"/>
                             
                         </td>
                         <td>
@@ -77,8 +77,8 @@
                                 for (BrandDTO brand : brandList) {
                                     if (brand.getBrandID() == product.getBrandID()) {
                             %>
-<!--                            <input type="text" name="brandID" value="" />-->
                                 <%= brand.getBrandName()%>
+                                <input type="hidden" name="brandID" value="<%= brand.getBrandName()%>" />
                             <%
 
                                     }

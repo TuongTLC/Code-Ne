@@ -13,9 +13,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import tuongtlc.products.BrandDTO;
 import tuongtlc.products.ProductDAO;
 import tuongtlc.products.ProductDTO;
+import tuongtlc.users.UserDTO;
 
 /**
  *
@@ -25,11 +27,16 @@ import tuongtlc.products.ProductDTO;
 public class SearchProductController extends HttpServlet {
     private static final String ERROR="admin.jsp";
     private static final String SUCCESS="admin.jsp";
+    private static final String ERROR_USER="shoping.jsp";
+    private static final String SUCCESS_USER="shoping.jsp";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            HttpSession session = request.getSession();
+            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            
             String search = request.getParameter("search");
             ProductDAO dao = new ProductDAO();
             List<ProductDTO> list = dao.getListProduct(search);
@@ -37,7 +44,11 @@ public class SearchProductController extends HttpServlet {
             if (list.size() != 0) {
                 request.setAttribute("LIST_PRODUCT", list);
                 request.setAttribute("LIST_BRAND", brandList);
-                url=SUCCESS;
+                if (loginUser == null || loginUser.getRoleID() != 1) {
+                    url = SUCCESS_USER;
+                }else if(loginUser.getRoleID() == 1) {
+                    url=SUCCESS;
+                }  
             }
             
         } catch (Exception e) {

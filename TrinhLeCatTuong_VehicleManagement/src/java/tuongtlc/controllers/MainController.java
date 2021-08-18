@@ -28,6 +28,9 @@ public class MainController extends HttpServlet {
     private static final String DELETE_PRODUCT = "DeleteProductController";
     private static final String UPDATE_PRODUCT = "UpdateProductController";
     private static final String CREATE_PRODUCT = "CreateProductController";
+    private static final String ADD_TO_CART = "AddToCartController";
+    private static final String REMOVE_FROM_CART = "RemoveFromCartController";
+    private static final String EDIT_CART = "EditCartController";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -50,7 +53,14 @@ public class MainController extends HttpServlet {
                 url = UPDATE_PRODUCT;
             }else if ("Create Product".equals(action)) {
                 url = CREATE_PRODUCT;
+            }else if ("AddToCart".equals(action)) {
+                url = ADD_TO_CART;
+            }else if ("Remove".equals(action)) {
+                url = REMOVE_FROM_CART;
+            }else if ("Edit".equals(action)) {
+                url = EDIT_CART;
             }
+            
             
         } catch (Exception e) {
             log("ERROR at MainController " + e.toString());

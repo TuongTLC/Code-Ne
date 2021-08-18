@@ -3,62 +3,51 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tuongtlc.controllers.product;
+package tuongtlc.controllers.cart;
 
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import tuongtlc.products.BrandDTO;
-import tuongtlc.products.ProductDAO;
-import tuongtlc.products.ProductDTO;
+import javax.servlet.http.HttpSession;
+import tuongtlc.products.CartDTO;
+import tuongtlc.products.CartProductDTO;
 
 /**
  *
  * @author tuongtlc
  */
-@WebServlet(name = "UpdateProductController", urlPatterns = {"/UpdateProductController"})
-public class UpdateProductController extends HttpServlet {
-    private static final String ERROR="admin.jsp";
-    private static final String SUCCESS="SearchProductController";
+@WebServlet(name = "EditCartController", urlPatterns = {"/EditCartController"})
+public class EditCartController extends HttpServlet {
+
+    private static final String ERROR = "error.jsp";
+    private static final String SUCCESS = "viewCart.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            int productID = Integer.parseInt(request.getParameter("productID"));
-            String productName = request.getParameter("productName");
-            float price = Float.parseFloat(request.getParameter("productPrice"));
-            
-            int brandID = 0;
-            String brandName= request.getParameter("brandID");
-            ProductDAO dao = new ProductDAO();
-            List<BrandDTO> brandList = dao.getListBrand();
-            for (BrandDTO brand : brandList) {
-                if (brand.getBrandName().equalsIgnoreCase(brandName)) {
-                    brandID = brand.getBrandID();
+            String id = request.getParameter("id");
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            HttpSession session = request.getSession();
+            CartDTO cart = (CartDTO) session.getAttribute("CART");
+            if (cart != null) {
+                CartProductDTO pro = null;
+                pro = cart.getCart().get(id.trim());
+                pro.setQuantity(quantity);
+                boolean check = cart.update(id.trim(), pro);
+                if (check) {
+                    session.setAttribute("CART", cart);
+                    url = SUCCESS;
                 }
             }
-            
-            String description = request.getParameter("productDescription");
-            int  quantity = Integer.parseInt(request.getParameter("productQuantity"));
-            int sold = Integer.parseInt(request.getParameter("productSold"));
-            
-            ProductDTO dto = new ProductDTO(productID, productName, price, description, brandID, quantity, sold);
-            boolean check = dao.update(dto);
-            if (check) {
-                url = SUCCESS; 
-            }else{
-                request.setAttribute("ERROR", "Can not update!");
-            }
-            
         } catch (Exception e) {
-            log("ERROR at UpdateController"+e.toString());
-            e.printStackTrace();
-        }finally{
+            log("ERROR at EditFromCartController" + e.toString());
+        } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
