@@ -23,14 +23,9 @@
             <input type="submit" value="Login" name="action" />
             <input type="reset" value="Reset" />
         </form>
-        <%
-            String error = (String)request.getAttribute("ERROR");
-            if (error==null) {
-                    error ="";
-                }
-        %>
+        
         <font color="red">
-        <%= error %><br/>
+        ${requestScope.ERROR}<br/>
         </font>
         <a href="createUser.jsp">Create New Account</a><br/>
         <a href="shoping.jsp">Shop</a>
