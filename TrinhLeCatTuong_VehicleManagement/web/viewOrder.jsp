@@ -4,6 +4,7 @@
     Author     : tuongtlc
 --%>
 
+<%@page import="tuongtlc.users.UserDTO"%>
 <%@page import="tuongtlc.products.ProductDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="tuongtlc.order.OrderProductDTO"%>
@@ -17,6 +18,13 @@
     </head>
     <body>
         <h1>View Order</h1>
+        <%
+            UserDTO loginUser = (UserDTO)session.getAttribute("LOGIN_USER");
+            if (loginUser == null || (loginUser.getRoleID()!=2)) {
+                    response.sendRedirect("login.jsp");
+                    return;
+                }
+        %>
         <form action="MainController" method="POST">
             Order ID <input type="text" name="searchOrder" />
             <input type="submit" value="Search Order" name="action"/>
@@ -66,7 +74,7 @@
                     }%>
             </tbody>
         </table>
-            <h1> Bill total: <%= billTotal %></h1>
+            <h1> Bill total: <%= billTotal %>$</h1>
         <%
             }
         %>
@@ -75,9 +83,10 @@
             if (erroMsg == null) {
                 erroMsg = "";
             }
-        %>
-        <font color="red">
+        %><font color="red">
             <%= erroMsg %>
-        </font>
+        </font><br/>
+        <a href="shoping.jsp">Return to shop</a>
+        
     </body>
 </html>

@@ -4,6 +4,7 @@
     Author     : trinh
 --%>
 
+<%@page import="tuongtlc.users.UserDTO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="java.math.BigDecimal"%>
@@ -19,6 +20,11 @@
     <body>
         <h1>This is your Cart!</h1>
         <%
+            UserDTO loginUser = (UserDTO)session.getAttribute("LOGIN_USER");
+            if (loginUser == null || (loginUser.getRoleID()!=2)) {
+                    response.sendRedirect("login.jsp");
+                    return;
+                }
             CartDTO cart = (CartDTO) session.getAttribute("CART");
             if (cart != null) {
         %>
@@ -72,8 +78,6 @@
                 <%
                     String search = request.getParameter("search");
                 %>
-            <a href="shoping.jsp">Add more items</a>
-            
             
             <form action="MainController" method="POST">
                 <%
@@ -85,5 +89,6 @@
         <%
             }
         %>
+        <a href="shoping.jsp">Add more items</a>
     </body>
 </html>

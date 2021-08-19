@@ -90,7 +90,7 @@ public class UserDAO {
         try {
             con = DBUtils.getConnection();
             if (con!=null) {
-                String sql="SELECT userID FROM tblUsers "
+                String sql="SELECT userName FROM tblUsers "
                         + " WHERE userName=? ";
                 ps = con.prepareStatement(sql);
                 ps.setString(1, userName);

@@ -55,8 +55,8 @@ public class CreateProductController extends HttpServlet {
             int sold = 0;
             
             
-            if (productName.trim().length()<=1 || productName.trim().length()>50) {
-                proErr.setProductNameErr("Product Name length must >0 and <50");
+            if (productName.trim().length()<5 || productName.trim().length()>50) {
+                proErr.setProductNameErr("Product Name length must >5 and <50");
                 check = false;
             }
             if (brandName.trim().length()<=0 ||  brandName.trim().length()>50) {
@@ -75,6 +75,7 @@ public class CreateProductController extends HttpServlet {
                 if (brand.getBrandName().equalsIgnoreCase(brandName)) {
                     brandID = brand.getBrandID();
                     brandCheck=false;
+                    break;
                 }else{
                     brandCheck = true;
                 }

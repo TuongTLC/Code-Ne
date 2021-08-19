@@ -39,14 +39,15 @@ public class CreateUserController extends HttpServlet {
             int roleID = 2;
             boolean check = true;
 
+            UserDAO dao = new UserDAO();
+            boolean checkDup = dao.checkDuplicate(userName);
+            if (checkDup) {
+                check = false;
+                userErr.setUserNameError("Duplidate UserName!!!");
+            }
             if (userName.length() <= 3 || userName.length() > 10) {
                 check = false;
                 userErr.setUserNameError("UserID must >=3 and <=10");
-            }
-            UserDAO dao = new UserDAO();
-            boolean checkDup = dao.checkDuplicate(userName);
-            if (check) {
-                userErr.setUserNameError("Duplidate UserName!!!");
             }
             if (fullName.length() <= 5 || fullName.length() > 20) {
                 check = false;
