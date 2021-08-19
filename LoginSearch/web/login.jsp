@@ -31,9 +31,10 @@
         %>
         <font color="red">
         <%= error %><br/>
+        </font>
         <a href="createUser.jsp">Create New Account</a><br/>
         <a href="shoping.jsp">Shop</a>
-        </font>
+        
         </div>
         </div>
     </body>
