@@ -7,11 +7,19 @@ package tuongtlc.controllers.order;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import tuongtlc.order.OrderDAO;
+import tuongtlc.order.OrderDTO;
+import tuongtlc.order.OrderProductDTO;
+import tuongtlc.products.ProductDAO;
+import tuongtlc.products.ProductDTO;
+import tuongtlc.users.UserDTO;
 
 /**
  *
@@ -26,7 +34,26 @@ public class SearchOrderController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
+            int orderID = Integer.parseInt(request.getParameter("searchOrder"));
+            HttpSession session = request.getSession();
+            UserDTO user = (UserDTO) session.getAttribute("LOGIN_USER");
+            String userName = user.getUserName();
+            OrderDAO dao = new OrderDAO();
+            OrderDTO orderDTO = dao.searchOrder(userName, orderID);
             
+            ProductDAO proDAO = new ProductDAO();
+            List<ProductDTO> proDTO = proDAO.getListProduct("");
+            if (orderDTO!= null) {
+                List<OrderProductDTO> itemList = dao.searchOrderItems(orderID);
+                if (!itemList.isEmpty()) {
+                    request.setAttribute("searchedOrder", orderDTO);
+                    request.setAttribute("orderItems", itemList);
+                    request.setAttribute("productNameList", proDTO);
+                    url=SUCCESS;
+                }
+            }else{
+                request.setAttribute("message", "Can not find order with ID: "+ orderID+" !!!");
+            }
         } catch (Exception e) {
             log("ERROR at SearchOrderController "+ e.toString());
         }finally{
