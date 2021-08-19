@@ -6,7 +6,7 @@
 package tuongtlc.controllers.cart;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpSession;
 import tuongtlc.order.OrderDAO;
 import tuongtlc.order.OrderDTO;
 import tuongtlc.order.OrderProductDTO;
-import tuongtlc.products.CartDTO;
 import tuongtlc.products.CartProductDTO;
 import tuongtlc.products.ProductDTO;
 import tuongtlc.users.UserDTO;
@@ -37,15 +36,15 @@ import tuongtlc.users.UserDTO;
         try {
             OrderDAO dao = new OrderDAO();
             HttpSession session = request.getSession();
-            UserDTO loginUser = (UserDTO) session.getAttribute("LOGIN_USER");
+            UserDTO loginUser = (UserDTO)session.getAttribute("LOGIN_USER");
             boolean orderCheck = dao.insertOrder(loginUser.getUserName());
             List<CartProductDTO> cart = (List<CartProductDTO>)session.getAttribute("orderList");
             List<OrderProductDTO> order = new ArrayList<>();
             List<ProductDTO> proList = dao.getListProduct("");
             OrderDTO orderDTO = dao.getOrderList(loginUser.getUserName());
-            String productName = null;
+            String productName;
             int productID = 0;
-            int quantity = 0;
+            int quantity;
             for (CartProductDTO cartP : cart) {
                 productName = cartP.getName();
                 quantity = cartP.getQuantity();
@@ -67,9 +66,8 @@ import tuongtlc.users.UserDTO;
                 request.setAttribute("message", "Check out complete, your order ID is "+orderDTO.getOrderID()+" !!!");
             }
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             log("ERROR at CheckOutController "+e.toString());
-            e.printStackTrace();
         }finally{
             request.getRequestDispatcher(url).forward(request, response);
         }
